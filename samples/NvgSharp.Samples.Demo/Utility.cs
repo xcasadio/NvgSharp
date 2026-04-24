@@ -23,15 +23,28 @@ namespace NvgSharp.Samples
 		public static float Hue(float h, float m1, float m2)
 		{
 			if ((h) < (0))
+			{
 				h += (float)(1);
+			}
+
 			if ((h) > (1))
+			{
 				h -= (float)(1);
+			}
+
 			if ((h) < (1.0f / 6.0f))
+			{
 				return (float)(m1 + (m2 - m1) * h * 6.0f);
+			}
 			else if ((h) < (3.0f / 6.0f))
+			{
 				return (float)(m2);
+			}
 			else if ((h) < (4.0f / 6.0f))
+			{
 				return (float)(m1 + (m2 - m1) * (2.0f / 3.0f - h) * 6.0f);
+			}
+
 			return (float)(m1);
 		}
 
@@ -39,7 +52,10 @@ namespace NvgSharp.Samples
 		{
 			h = (float)(Mod((float)(h), (float)(1.0f)));
 			if ((h) < (0.0f))
+			{
 				h += (float)(1.0f);
+			}
+
 			s = (float)(Clamp((float)(s), (float)(0.0f), (float)(1.0f)));
 			l = (float)(Clamp((float)(l), (float)(0.0f), (float)(1.0f)));
 			var m2 = (float)(l <= 0.5f ? (l * (1 + s)) : (l + s - l * s));

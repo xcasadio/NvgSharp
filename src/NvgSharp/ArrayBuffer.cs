@@ -37,7 +37,10 @@ namespace NvgSharp
 
 		public void EnsureSize(int required)
 		{
-			if (_array.Length >= required) return;
+			if (_array.Length >= required)
+			{
+				return;
+			}
 
 			// Realloc
 			var oldData = _array;

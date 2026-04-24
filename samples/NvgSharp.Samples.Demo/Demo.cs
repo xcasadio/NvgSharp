@@ -552,7 +552,9 @@ namespace NvgSharp.Samples
 				a = clampf((u2 - v) / dv, 0, 1);
 
 				if (a < 1.0f)
+				{
 					drawSpinner(vg, tx + thumb / 2, ty + thumb / 2, thumb * 0.25f, t);
+				}
 
 				imgPaint = vg.ImagePattern(tx + ix, ty + iy, iw, ih, 0.0f / 180.0f * (float)Math.PI, images[i], a);
 				vg.BeginPath();

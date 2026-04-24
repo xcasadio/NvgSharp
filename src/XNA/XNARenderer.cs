@@ -84,13 +84,25 @@ namespace NvgSharp
 		public GraphicsDevice GraphicsDevice => _device;
 
 		public XNARenderer(GraphicsDevice device, bool edgeAntiAlias)
+			: this(device, edgeAntiAlias, (XNARendererOptions)null)
+		{
+		}
+
+		public XNARenderer(GraphicsDevice device, Effect effect, bool edgeAntiAlias)
 		{
 			if (device == null)
-				throw new ArgumentNullException("device");
+			{
+				throw new ArgumentNullException(nameof(device));
+			}
+
+			if (effect == null)
+			{
+				throw new ArgumentNullException(nameof(effect));
+			}
 
 			_device = device;
 			_edgeAntiAlias = edgeAntiAlias;
-			_effect = new Effect(device, Resources.GetNvgEffectSource(edgeAntiAlias));
+			_effect = effect;
 
 			_transformMatParam = _effect.Parameters["transformMat"];
 			_scissorMatParam = _effect.Parameters["scissorMat"];
@@ -112,6 +124,41 @@ namespace NvgSharp
 
 			foreach (RenderingType param in Enum.GetValues(typeof(RenderingType)))
 				_techniques[(int)param] = _effect.Techniques[param.ToString()];
+		}
+
+		public XNARenderer(GraphicsDevice device, bool edgeAntiAlias, INvgEffectProvider effectProvider)
+			: this(device, effectProvider?.CreateEffect(device, edgeAntiAlias), edgeAntiAlias)
+		{
+		}
+
+		public XNARenderer(GraphicsDevice device, bool edgeAntiAlias, XNARendererOptions rendererOptions)
+			: this(device, CreateEffect(device, edgeAntiAlias, rendererOptions), edgeAntiAlias)
+		{
+		}
+
+		private static Effect CreateEffect(GraphicsDevice device, bool edgeAntiAlias, XNARendererOptions rendererOptions)
+		{
+			if (device == null)
+			{
+				throw new ArgumentNullException(nameof(device));
+			}
+
+			rendererOptions ??= new XNARendererOptions();
+
+			if (rendererOptions.Effect != null)
+			{
+				return rendererOptions.Effect;
+			}
+
+			var effectProvider = rendererOptions.EffectProvider ?? new EmbeddedResourceEffectProvider(rendererOptions.GraphicsBackend);
+			var effect = effectProvider.CreateEffect(device, edgeAntiAlias);
+
+			if (effect == null)
+			{
+				throw new InvalidOperationException("The configured effect provider returned null.");
+			}
+
+			return effect;
 		}
 
 		public void Draw(float devicePixelRatio, IEnumerable<CallInfo> calls, Vertex[] vertexes)

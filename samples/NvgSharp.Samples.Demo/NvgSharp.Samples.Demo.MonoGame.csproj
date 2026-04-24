@@ -1,9 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
     <DefineConstants>$(DefineConstants);MONOGAME</DefineConstants>
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
   </PropertyGroup>
     <ItemGroup>
       <None Include="..\Assets\images\image1.jpg" Link="Assets\images\image1.jpg">
@@ -62,12 +63,17 @@
       </None>
     </ItemGroup>
 
-    <ItemGroup>
-      <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.4.1" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\..\src\NvgSharp.Text\NvgSharp.Text.MonoGame.csproj" />
-      <ProjectReference Include="..\..\src\XNA\NvgSharp.MonoGame.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\NvgSharp.Text\NvgSharp.Text.MonoGame.csproj" />
+    <ProjectReference Include="..\..\src\XNA\NvgSharp.MonoGame.csproj" />
+  </ItemGroup>
+
+  <Target Name="BuildMonoGameContent" BeforeTargets="Build">
+    <MakeDir Directories="$(TargetDir)Content" />
+    <Exec Command='dotnet mgcb /quiet /@:&quot;$(MSBuildProjectDirectory)\Content.mgcb&quot; /platform:DesktopGL /outputDir:&quot;$(TargetDir)Content&quot; /intermediateDir:&quot;$(BaseIntermediateOutputPath)Content&quot; /workingDir:&quot;$(MSBuildProjectDirectory)&quot;' />
+  </Target>
 </Project>

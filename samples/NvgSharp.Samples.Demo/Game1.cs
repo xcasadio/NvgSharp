@@ -40,7 +40,11 @@ namespace NvgSharp.Samples.XNA
 		/// </summary>
 		protected override void LoadContent()
 		{
-			_context = new NvgContext(GraphicsDevice, true);
+            const bool edgeAntiAlias = true;
+			var effectName = edgeAntiAlias ? "Effect_AA" : "Effect";
+			var effect = Content.Load<Effect>(effectName);
+
+			_context = new NvgContext(GraphicsDevice, effect, edgeAntiAlias);
 
 			_demo = new Demo(_context);
 

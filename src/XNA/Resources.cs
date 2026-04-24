@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework.Graphics;
@@ -7,7 +9,7 @@ namespace NvgSharp
 {
 	internal static class Resources
 	{
-		private static byte[] _effectSource = null, _effectWithAASource = null;
+		private static readonly Dictionary<string, byte[]> _effectSources = new Dictionary<string, byte[]>();
 
 #if MONOGAME
 		private static bool? _isOpenGL;
@@ -15,18 +17,36 @@ namespace NvgSharp
 
 		public static byte[] GetNvgEffectSource(bool edgeAntiAlias)
 		{
-			if (_effectSource != null && !edgeAntiAlias)
-			{
-				return _effectSource;
-			}
+			return GetNvgEffectSource(edgeAntiAlias, NvgGraphicsBackend.Auto);
+		}
 
-			if (_effectWithAASource != null && edgeAntiAlias)
+		public static byte[] GetNvgEffectSource(bool edgeAntiAlias, NvgGraphicsBackend graphicsBackend)
+		{
+			var path = GetEffectResourcePath(edgeAntiAlias, graphicsBackend);
+
+			if (_effectSources.TryGetValue(path, out var cachedEffectSource))
 			{
-				return _effectWithAASource;
+				return cachedEffectSource;
 			}
 
 			var assembly = typeof(Resources).Assembly;
+			using (var ms = new MemoryStream())
+			using (var stream = assembly.GetManifestResourceStream(path))
+			{
+				if (stream == null)
+				{
+					throw new InvalidOperationException("Unable to find embedded effect resource '" + path + "'.");
+				}
 
+				stream.CopyTo(ms);
+				var result = ms.ToArray();
+				_effectSources[path] = result;
+				return result;
+			}
+		}
+
+		private static string GetEffectResourcePath(bool edgeAntiAlias, NvgGraphicsBackend graphicsBackend)
+		{
 			var name = "Effect";
 			if (edgeAntiAlias)
 			{
@@ -34,30 +54,20 @@ namespace NvgSharp
 			}
 
 #if MONOGAME
-				var path = IsOpenGL?"NvgSharp.Resources." + name + ".ogl.mgfxo":"NvgSharp.Resources." + name + ".dx11.mgfxo";
+			var resolvedBackend = graphicsBackend == NvgGraphicsBackend.Auto
+				? (IsOpenGL ? NvgGraphicsBackend.OpenGL : NvgGraphicsBackend.DirectX)
+				: graphicsBackend;
+
+			return resolvedBackend switch
+			{
+				NvgGraphicsBackend.DirectX => "NvgSharp.Resources." + name + ".dx11.mgfxo",
+				NvgGraphicsBackend.OpenGL => "NvgSharp.Resources." + name + ".ogl.mgfxo",
+				NvgGraphicsBackend.OpenGLES => "NvgSharp.Resources." + name + ".ogl.mgfxo",
+				_ => throw new InvalidOperationException("Unsupported graphics backend '" + resolvedBackend + "'.")
+			};
 #elif FNA
-			var path = "NvgSharp.Resources." + name + ".fxb";
+			return "NvgSharp.Resources." + name + ".fxb";
 #endif
-
-			byte[] result;
-
-			var ms = new MemoryStream();
-			using (var stream = assembly.GetManifestResourceStream(path))
-			{
-				stream.CopyTo(ms);
-				result = ms.ToArray();
-			}
-
-			if (edgeAntiAlias)
-			{
-				_effectWithAASource = result;
-			}
-			else
-			{
-				_effectSource = result;
-			}
-
-			return result;
 		}
 
 #if MONOGAME		
@@ -69,8 +79,8 @@ namespace NvgSharp
 				{
 					_isOpenGL = (from f in typeof(GraphicsDevice).GetFields(BindingFlags.NonPublic |
 						 BindingFlags.Instance)
-								 where f.Name == "glFramebuffer"
-								 select f).FirstOrDefault() != null;
+							 where f.Name == "glFramebuffer"
+							 select f).FirstOrDefault() != null;
 				}
 
 				return _isOpenGL.Value;

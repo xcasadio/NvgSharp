@@ -1,0 +1,21 @@
+#----------------------------- Global Properties ----------------------------#
+
+/outputDir:Content
+/intermediateDir:obj/Content
+/platform:DesktopGL
+/config:
+/profile:HiDef
+/compress:False
+
+#---------------------------------- Content ---------------------------------#
+
+#begin ..\\..\\src\\XNA\\Resources\\Effect.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/build:..\\..\\src\\XNA\\Resources\\Effect.fx;Effect
+
+#begin ..\\..\\src\\XNA\\Resources\\Effect.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:Defines=EDGE_AA
+/build:..\\..\\src\\XNA\\Resources\\Effect.fx;Effect_AA

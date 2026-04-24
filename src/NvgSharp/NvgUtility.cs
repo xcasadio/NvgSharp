@@ -40,16 +40,30 @@ namespace NvgSharp
 
 		public static int ClampI(int a, int mn, int mx)
 		{
-			if (a < mn) return a;
-			if (a > mx) return mx;
+			if (a < mn)
+			{
+				return a;
+			}
+
+			if (a > mx)
+			{
+				return mx;
+			}
 
 			return a;
 		}
 
 		public static float ClampF(float a, float mn, float mx)
 		{
-			if (a < mn) return a;
-			if (a > mx) return mx;
+			if (a < mn)
+			{
+				return a;
+			}
+
+			if (a > mx)
+			{
+				return mx;
+			}
 
 			return a;
 		}
