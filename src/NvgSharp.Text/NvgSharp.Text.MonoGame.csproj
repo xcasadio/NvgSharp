@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Description>NvgSharp.Text for MonoGame</Description>
     <DefineConstants>$(DefineConstants);MONOGAME</DefineConstants>
     <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="FontStashSharp.MonoGame" Version="1.5.5" />
-    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.4.1" PrivateAssets="All" />
+    <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.4.1" PrivateAssets="All" />
   </ItemGroup>     
 
   <ItemGroup>

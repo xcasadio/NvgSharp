@@ -1,7 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseWindowsForms>true</UseWindowsForms>
     <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
     <DefineConstants>$(DefineConstants);MONOGAME</DefineConstants>
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
@@ -64,7 +66,7 @@
     </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.4.1" />
+    <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.4.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -74,6 +76,6 @@
 
   <Target Name="BuildMonoGameContent" BeforeTargets="Build">
     <MakeDir Directories="$(TargetDir)Content" />
-    <Exec Command='dotnet mgcb /quiet /@:&quot;$(MSBuildProjectDirectory)\Content.mgcb&quot; /platform:DesktopGL /outputDir:&quot;$(TargetDir)Content&quot; /intermediateDir:&quot;$(BaseIntermediateOutputPath)Content&quot; /workingDir:&quot;$(MSBuildProjectDirectory)&quot;' />
+    <Exec Command='dotnet mgcb /quiet /@:&quot;$(MSBuildProjectDirectory)\Content.mgcb&quot; /platform:Windows /outputDir:&quot;$(TargetDir)Content&quot; /intermediateDir:&quot;$(BaseIntermediateOutputPath)Content&quot; /workingDir:&quot;$(MSBuildProjectDirectory)&quot;' />
   </Target>
 </Project>
