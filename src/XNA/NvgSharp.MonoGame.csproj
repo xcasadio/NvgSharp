@@ -18,6 +18,7 @@
   <ItemGroup>
     <Compile Include="..\NvgSharp\**\*.cs" LinkBase="NvgSharp" />
     <Compile Remove="..\NvgSharp\obj\**\*.cs" LinkBase="NvgSharp" />
+    <Compile Remove="artifacts\**\*.cs" />
   </ItemGroup>
 
   <ItemGroup>
