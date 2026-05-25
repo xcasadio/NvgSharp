@@ -1,4 +1,6 @@
 <Project>
+  <Import Project="..\Directory.Build.props" />
+
   <PropertyGroup>
     <Authors>NvgSharpTeam</Authors>
     <Product>NvgSharp</Product>
@@ -7,5 +9,6 @@
     <RootNamespace>NvgSharp</RootNamespace>
     <Version>0.6.3</Version>
     <FontStashSharpVersion>1.2.8</FontStashSharpVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
   </PropertyGroup>
 </Project>

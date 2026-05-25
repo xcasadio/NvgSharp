@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>$(WindowsTargetFramework)</TargetFramework>
     <PlatformTarget>x64</PlatformTarget>
     <RollForward>Major</RollForward>
     <PublishReadyToRun>false</PublishReadyToRun>
@@ -29,6 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MonoGame.Framework.WindowsDX" PrivateAssets="All" />
+    <PackageReference Include="MonoGame.Framework.DesktopGL" PrivateAssets="All" />
   </ItemGroup>
 </Project>
